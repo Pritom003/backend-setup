@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "start": "nodemon ./dist/server.js",
+    "dev": "nodemon ./dist/server.js",
+    "build": "tsc --w",
     "lint": "eslint src/**/*.ts",
     "format": "prettier . --write",
     "lint:fix": "eslint src/**/*.ts --fix",
