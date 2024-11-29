@@ -2,7 +2,7 @@
 
 export type Guadian = {
   fatherName: string;
-  motherName: string;
+  motherName?: string;
   fathercontact: string;
   fatheroccupation: string;
 };
@@ -18,10 +18,10 @@ export type Name = {
   lastName: string;
 };
 
-export type Student = {
+export type TStudent = {
   id: string;
   name: Name;
-  gender: 'male' | 'female';
+  gender: 'male' | 'female'|'others';
   DateOfBirth: string;
   email: string;
   contactNo: string;

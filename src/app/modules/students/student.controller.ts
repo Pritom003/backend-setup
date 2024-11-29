@@ -1,22 +1,8 @@
 import { Request, Response } from 'express';
 import { StudentServices } from './studen.service';
+// import StudentValSchema from './student.validation';
 
-const createStudent = async (req: Request, res: Response) => {
-  try {
-    // data from client
-    const student = req.body.student;
-    // send the service
-    const result = await StudentServices.createStudentoDB(student);
-    // send the result to client
-    res.status(200).json({
-      success: true,
-      message: 'student created successfully',
-      data: result,
-    });
-  } catch (err) {
-    console.log(err);
-  }
-};
+
 const getAllstudents = async (req: Request, res: Response) => {
   try {
     const result = await StudentServices.getAllstudentsfromDB();
@@ -26,7 +12,11 @@ const getAllstudents = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: 'something went wrong',
+      data: err,
+    });
   }
 };
 const getSingletudents = async (req: Request, res: Response) => {
@@ -39,11 +29,15 @@ const getSingletudents = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: 'something went wrong',
+      data: err,
+    });
   }
 };
 export const studentController = {
-  createStudent,
+  // createStudent,
   getAllstudents,
   getSingletudents,
 };
