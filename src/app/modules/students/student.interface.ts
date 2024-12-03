@@ -1,5 +1,7 @@
 // import { Schema, model, connect } from 'mongoose';
 
+import { Model, Types } from "mongoose";
+
 export type Guadian = {
   fatherName: string;
   motherName?: string;
@@ -20,6 +22,7 @@ export type Name = {
 
 export type TStudent = {
   id: string;
+  user:Types.ObjectId
   name: Name;
   gender: 'male' | 'female'|'others';
   DateOfBirth: string;
@@ -30,5 +33,8 @@ export type TStudent = {
   guardian: Guadian;
   Localguardian: LocalGuadian;
   ProfileImage?: string;
-  isActive: 'active' | 'inActive';
+
 };
+export interface StudentModel extends Model<TStudent> {
+  isUserExists(id: string): Promise<TStudent | null>;
+}

@@ -33,6 +33,11 @@ const LocalGuadianScheema = new Schema<LocalGuadian>({
 
 const StudenSchema = new Schema<TStudent>({
   id: { type: String, required: [true, 'Student ID is required'], unique: true },
+  user : {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: [true, 'user ID is required'], unique: true
+  },
   name: {
     type: StudentNameScheema,
     required: [true, 'Student name is required'],
@@ -64,17 +69,38 @@ const StudenSchema = new Schema<TStudent>({
     },
     required: [true, 'Blood group is required'],
   },
-  isActive: {
-    type: String,
-    enum: ['active', 'inActive'],
-    default: 'active',
-  },
+
   Localguardian: {
     type: LocalGuadianScheema,
     required: [true, 'Local guardian details are required'],
   },
   ProfileImage: { type: String, required: [true, 'Profile image is required'] },
 });
-// c
+// virtual
+StudenSchema.virtual('fullName').get(function () {
+  return this.name.firstname + this.name.middleName + this.name.lastName;
+});
+
+// Query Middleware
+StudenSchema.pre('find', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+StudenSchema.pre('findOne', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+StudenSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+  next();
+});
+
+//creating a custom static method
+StudenSchema.statics.isUserExists = async function (id: string) {
+  const existingUser = await studentModel.findOne({ id });
+  return existingUser;
+};
 const studentModel = model<TStudent>('student', StudenSchema);
 export default studentModel;

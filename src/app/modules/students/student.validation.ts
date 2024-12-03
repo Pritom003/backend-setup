@@ -26,23 +26,30 @@ const LocalGuadianvalidationSchema = z.object({
   address: z.string().min(1, { message: 'Local guardian\'s address is required' }),
 });
 
-const StudentValSchema = z.object({
-  id: z.string().min(1, { message: 'Student ID is required' }),
-  name: NameValSchema,
-  gender: z.enum(['male', 'female', 'others']),
-  DateOfBirth: z.string().min(1, { message: 'Date of birth is required' }),
-  email: z.string()
-    .email({ message: '{VALUE} is not a valid email' })
-    .min(1, { message: 'Email address is required' }),
-  contactNo: z.string().min(1, { message: 'Contact number is required' }),
-  presendAddress: z.string().min(1, { message: 'Present address is required' }),
-  guardian: GuadianValidationSchema,
-  BloodGroup: z.enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'], {
-    errorMap: () => ({ message: '{VALUE} is not a valid blood group' }),
+const CreateStudentValSchema =z.object({
+  body: z.object({
+    password: z.string().max(10, { message: 'Password must be 10 characters or less' }),
+    student:z.object({
+      name: NameValSchema,
+    gender: z.enum(['male', 'female', 'others']),
+    DateOfBirth: z.string().min(1, { message: 'Date of birth is required' }),
+    email: z.string()
+      .email({ message: '{VALUE} is not a valid email' })
+      .min(1, { message: 'Email address is required' }),
+    contactNo: z.string().min(1, { message: 'Contact number is required' }),
+    presendAddress: z.string().min(1, { message: 'Present address is required' }),
+    guardian: GuadianValidationSchema,
+    BloodGroup: z.enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'], {
+      errorMap: () => ({ message: '{VALUE} is not a valid blood group' }),
+    }),
+   
+    Localguardian: LocalGuadianvalidationSchema,
+    ProfileImage: z.string().min(1, { message: 'Profile image is required' }),
   }),
-  isActive: z.enum(['active', 'inActive']).default('active'),
-  Localguardian: LocalGuadianvalidationSchema,
-  ProfileImage: z.string().min(1, { message: 'Profile image is required' }),
+}),
 });
 
-export default StudentValSchema;
+
+export const StudentValidation={
+ CreateStudentValSchema
+};

@@ -1,6 +1,7 @@
 import { model, Schema } from "mongoose";
 import { TUser } from "./User.interface";
-
+import config from "../../config";
+import bcrypt from 'bcrypt';
 const UserSchema =new Schema<TUser>({
 id:{
     type:String,
@@ -30,5 +31,21 @@ isDeleted:{
 }, {
     timestamps: true
 })
-const User =model<TUser>('User',UserSchema)
-export default User
+UserSchema.pre('save', async function (next) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const user = this; // doc
+    // hashing password and save into DB
+    user.password = await bcrypt.hash(
+      user.password,
+      Number(config.bycrypt_pass),
+    );
+    next();
+  });
+  
+  // set '' after saving password
+  UserSchema.post('save', function (doc, next) {
+    doc.password = '';
+    next();
+  });
+  
+  export const User = model<TUser>('User', UserSchema);
