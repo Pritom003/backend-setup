@@ -42,7 +42,7 @@ const CreateStudentValSchema =z.object({
     BloodGroup: z.enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'], {
       errorMap: () => ({ message: '{VALUE} is not a valid blood group' }),
     }),
-   
+    admissionSemister:z.string(),
     Localguardian: LocalGuadianvalidationSchema,
     ProfileImage: z.string().min(1, { message: 'Profile image is required' }),
   }),

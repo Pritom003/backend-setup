@@ -32,7 +32,9 @@ export type TStudent = {
   presendAddress: string;
   guardian: Guadian;
   Localguardian: LocalGuadian;
+  admissionSemister:Types.ObjectId,
   ProfileImage?: string;
+  isDeleted:boolean 
 
 };
 export interface StudentModel extends Model<TStudent> {
