@@ -3,10 +3,8 @@ import { TUser } from "./User.interface";
 import config from "../../config";
 import bcrypt from 'bcrypt';
 const UserSchema =new Schema<TUser>({
-id:{
-    type:String,
-    required:true
-},
+    id: { type: String, required: true, unique: true },
+
 password:{
     type:String,
     required:true
@@ -39,7 +37,7 @@ UserSchema.pre('save', async function (next) {
       user.password,
       Number(config.bycrypt_pass),
     );
-    next();
+    next(); 
   });
   
   // set '' after saving password

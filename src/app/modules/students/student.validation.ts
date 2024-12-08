@@ -1,11 +1,10 @@
 import { z } from 'zod';
 
 const NameValSchema = z.object({
-    firstname: z.string().min(1, { message: 'First name is required' }),
-    middleName: z.string().min(1, { message: 'Middle name is required' }),  
-    lastName: z.string().min(1, { message: 'Last name is required' }),
-  });
-  
+  firstname: z.string().min(1, { message: 'First name is required' }),
+  middleName: z.string().min(1, { message: 'Middle name is required' }),  
+  lastName: z.string().min(1, { message: 'Last name is required' }),
+});
 
 const GuadianValidationSchema = z.object({
   fatherName: z.string()
@@ -26,30 +25,52 @@ const LocalGuadianvalidationSchema = z.object({
   address: z.string().min(1, { message: 'Local guardian\'s address is required' }),
 });
 
-const CreateStudentValSchema =z.object({
+const CreateStudentValSchema = z.object({
   body: z.object({
     password: z.string().max(10, { message: 'Password must be 10 characters or less' }),
-    student:z.object({
+    student: z.object({
       name: NameValSchema,
-    gender: z.enum(['male', 'female', 'others']),
-    DateOfBirth: z.string().min(1, { message: 'Date of birth is required' }),
-    email: z.string()
-      .email({ message: '{VALUE} is not a valid email' })
-      .min(1, { message: 'Email address is required' }),
-    contactNo: z.string().min(1, { message: 'Contact number is required' }),
-    presendAddress: z.string().min(1, { message: 'Present address is required' }),
-    guardian: GuadianValidationSchema,
-    BloodGroup: z.enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'], {
-      errorMap: () => ({ message: '{VALUE} is not a valid blood group' }),
+      gender: z.enum(['male', 'female', 'others']),
+      DateOfBirth: z.string().min(1, { message: 'Date of birth is required' }),
+      email: z.string()
+        .email({ message: '{VALUE} is not a valid email' })
+        .min(1, { message: 'Email address is required' }),
+      contactNo: z.string().min(1, { message: 'Contact number is required' }),
+      presendAddress: z.string().min(1, { message: 'Present address is required' }),
+      guardian: GuadianValidationSchema,
+      BloodGroup: z.enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'], {
+        errorMap: () => ({ message: '{VALUE} is not a valid blood group' }),
+      }),
+      admissionSemister: z.string(),
+      academicDepartment: z.string(),
+      Localguardian: LocalGuadianvalidationSchema,
+      ProfileImage: z.string().min(1, { message: 'Profile image is required' }),
     }),
-    admissionSemister:z.string(),
-    Localguardian: LocalGuadianvalidationSchema,
-    ProfileImage: z.string().min(1, { message: 'Profile image is required' }),
   }),
-}),
 });
 
+// ✅ UpdateStudentValSchema (uses partial for optional updates)
+const UpdateStudentValSchema = z.object({
+  body: z.object({
+    password: z.string().max(10, { message: 'Password must be 10 characters or less' }).optional(),
+    student: z.object({
+      name: NameValSchema.partial(), // Makes all fields of name optional
+      gender: z.enum(['male', 'female', 'others']).optional(),
+      DateOfBirth: z.string().optional(),
+      email: z.string().email({ message: '{VALUE} is not a valid email' }).optional(),
+      contactNo: z.string().optional(),
+      presendAddress: z.string().optional(),
+      guardian: GuadianValidationSchema.partial(), // Makes guardian fields optional
+      BloodGroup: z.enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']).optional(),
+      admissionSemister: z.string().optional(),
+      academicDepartment: z.string().optional(),
+      Localguardian: LocalGuadianvalidationSchema.partial(), // Makes local guardian fields optional
+      ProfileImage: z.string().optional(),
+    }).partial(), // Entire student object is optional
+  }),
+});
 
-export const StudentValidation={
- CreateStudentValSchema
+export const StudentValidation = {
+  CreateStudentValSchema,
+  UpdateStudentValSchema
 };

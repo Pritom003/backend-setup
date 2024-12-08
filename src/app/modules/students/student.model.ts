@@ -33,7 +33,12 @@ const LocalGuardianSchema = new Schema<LocalGuadian>({
 
 const StudentSchema = new Schema<TStudent>({
   id: { type: String, required: true, unique: true },
-  user: { type: Schema.Types.ObjectId, ref: 'User', required: true, unique: true },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+    unique: true,
+  },
   name: { type: StudentNameSchema, required: true },
   gender: { type: String, enum: ['male', 'female', 'others'] },
   DateOfBirth: { type: String, required: true },
@@ -50,17 +55,25 @@ const StudentSchema = new Schema<TStudent>({
     enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
     required: true,
   },
-  admissionSemister:{
+  admissionSemister: {
     type: Schema.Types.ObjectId,
-    ref:'AcademicSem',required: true },
+    ref: 'AcademicSem',
+    required: true,
+  },
+  academicDepartment: {
+    type: Schema.Types.ObjectId,
+    ref: 'AcademicDepartment',
+  },
   Localguardian: { type: LocalGuardianSchema, required: true },
   ProfileImage: { type: String, required: true },
-  isDeleted:{type: Boolean,default:false} 
+  isDeleted: { type: Boolean, default: false },
 });
 
 // Virtual property for full name
 StudentSchema.virtual('fullName').get(function () {
-  return `${this.name.firstname} ${this.name.middleName ?? ''} ${this.name.lastName}`;
+  return `${
+    this.name.firstname
+  } ${this.name.middleName ?? ''} ${this.name.lastName}`;
 });
 
 // Query Middleware

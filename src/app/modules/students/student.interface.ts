@@ -33,6 +33,7 @@ export type TStudent = {
   guardian: Guadian;
   Localguardian: LocalGuadian;
   admissionSemister:Types.ObjectId,
+  academicDepartment: Types.ObjectId;
   ProfileImage?: string;
   isDeleted:boolean 
 
