@@ -17,8 +17,8 @@ const getAllAcademicDepsfromDB = async () => {
     );
     return result;
   };
-  const getsingleAcademicDepfromDB = async (AcademicDepId: string) => {
-    const result = await AcademicDepmodel.findOne({ AcademicDepId }).populate(
+  const getsingleAcademicDepfromDB = async (id: string) => {
+    const result = await AcademicDepmodel.findOne({ _id:id }).populate(
         'academicFaculty'
     );;
     return result;

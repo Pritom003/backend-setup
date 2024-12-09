@@ -1,7 +1,4 @@
-/* eslint-disable no-undef */
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import cors from 'cors';
 import express, { Application,  Request, Response } from 'express';
 
@@ -22,7 +19,8 @@ app.use('/api/v1', router);
 app.get('/', (req: Request, res: Response) => {
   res.send('Welcome to the Express app!');
 });
-app.use(globalErrorHandler)
 app.use(NotFound)
+
+app.use(globalErrorHandler)
 
 export default app;

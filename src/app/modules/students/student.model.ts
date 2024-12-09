@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
 import { Name, TStudent, Guadian, LocalGuadian } from './student.interface';
-
+import httpStatus from 'http-status';
+import AppError from '../Errors/AppErrors';
 const StudentNameSchema = new Schema<Name>({
   firstname: { type: String, required: true },
   middleName: { type: String },
@@ -96,6 +97,17 @@ StudentSchema.pre('aggregate', function (next) {
 StudentSchema.statics.isUserExists = async function (id: string) {
   return await studentModel.findOne({ id });
 };
+// Pre-hook for `findOneAndUpdate` and `findOneAndDelete`
+StudentSchema.pre(['findOneAndUpdate', 'findOneAndDelete'], async function (next) {
+  const id = this.getQuery().id;
 
+  // Check if the student exists
+  const studentExists = await model<TStudent>('student').findOne({ id });
+  if (!studentExists) {
+    return next(new AppError(httpStatus.NOT_FOUND, `Student with id: ${id} does not exist`));
+  }
+  
+  next();
+});
 const studentModel = model<TStudent>('student', StudentSchema);
 export default studentModel;

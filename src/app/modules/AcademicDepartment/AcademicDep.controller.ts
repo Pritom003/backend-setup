@@ -31,7 +31,7 @@ const getAllAcademicDeps :RequestHandler =  CatchAsync(async (req, res  ) => {
 })
 const getSinglAcademicDep :RequestHandler = CatchAsync( async (req, res  )=> {
 
-  const AcademicDepId = req.params.id;
+  const {AcademicDepId} = req.params;
   const result = await AcademicDepService.getsingleAcademicDepfromDB(AcademicDepId);
 
   sendResponse(res, {
