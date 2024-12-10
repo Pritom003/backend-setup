@@ -1,0 +1,1 @@
+export const facultyseachablefields =['name.firstname', 'designation','email']
