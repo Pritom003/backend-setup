@@ -6,7 +6,7 @@ import CatchAsync from '../../utils/fetch.async';
 
 const getAllstudents :RequestHandler =  CatchAsync(async (req, res  ) => {
 
-    const result = await StudentServices.getAllstudentsfromDB();
+    const result = await StudentServices.getAllstudentsfromDB(req.query);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,

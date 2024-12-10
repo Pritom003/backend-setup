@@ -5,18 +5,22 @@ import AppError from '../Errors/AppErrors';
 import httpStatus from 'http-status';
 import { User } from '../Users/user.models';
 import { TStudent } from './student.interface';
+import QueryBuilder from '../../Builder/QueryBuilder';
+import { StudentSearchableFields } from './student.const';
 
-const getAllstudentsfromDB = async () => {
-  const result = await studentModel.find()
-  .populate('admissionSemister')
-  .populate({
-    path: 'academicDepartment',
-    populate: {
-      path: 'academicFaculty',
-    },
-  });;
-  return result;
+const getAllstudentsfromDB = async (query: Record<string, unknown>) => {
+
+const studentQuery =new QueryBuilder (studentModel.find().populate('admissionSemister')
+.populate({
+  path: 'academicDepartment',
+  populate: {
+    path: 'academicFaculty',
+  }}),query).
+search(StudentSearchableFields).filter().sort().paginate().fields()
+const result =await studentQuery.modelQuery
+  return result
 };
+
 const getsinglestudnetfromDB = async (id: string) => {
   const result = await studentModel.findOne({ id })
   .populate('admissionSemister')
