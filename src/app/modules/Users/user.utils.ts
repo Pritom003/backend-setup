@@ -81,3 +81,42 @@ export const generateFacultyID = async (): Promise<string> => {
 
   return currentId;
 };
+const findLastAdminId = async (): Promise<string | undefined> => {
+  const lastAdmin = await User.findOne(
+    {
+      role: 'Admin',
+    },
+    {
+      id: 1,
+      _id: 0,
+    }
+  )
+    .sort({
+      createdAt: -1,
+    })
+    .lean();
+
+  return lastAdmin?.id;
+};
+
+// Generate a new unique Admin ID
+export const generateAdminID = async (): Promise<string> => {
+  // Get the last Admin ID
+  const lastAdminID = await findLastAdminId();
+
+  let currentId = 'A-0000'; // Default initial ID if no Admin exists yet
+
+  if (lastAdminID) {
+    // Increment the numeric part of the last ID
+    const lastNumericPart = parseInt(lastAdminID.split('-')[1], 10);
+    const newNumericPart = lastNumericPart + 1;
+
+    // Format the numeric part to 4 digits with leading zeros
+    const formattedNumericPart = newNumericPart.toString().padStart(4, '0');
+
+    // Generate the new ID
+    currentId = `A-${formattedNumericPart}`;
+  }
+
+  return currentId;
+};

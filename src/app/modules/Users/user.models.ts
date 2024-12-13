@@ -15,7 +15,7 @@ needsPassworChange:{
 },
 role:{
     type:String,
-    enum:['admin','student','faculty']
+    enum:['Admin','student','faculty']
 },
 status:{
     type:String,

@@ -1,0 +1,1 @@
+export const Adminseachablefields =['name.firstname', 'designation','email']

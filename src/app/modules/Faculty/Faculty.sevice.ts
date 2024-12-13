@@ -24,7 +24,7 @@ const result =await studentQuery.modelQuery
 };
 
 const getsinglefacultyfromDB = async (id: string) => {
-  const result = await FacultyShceemaModel.findOne({ id })
+  const result = await FacultyShceemaModel.findById( id )
   .populate({
     path: 'academicDepartment',
     populate: {
@@ -48,7 +48,7 @@ if(gender && Object.keys(gender).length){
   }
 }
 
-  const result = await FacultyShceemaModel.findOneAndUpdate({ id },modifiedData) 
+  const result = await FacultyShceemaModel.findByIdAndUpdate(id ,modifiedData) 
   return result;
 };
 const deleteFacultyFromDB = async (id: string) => {
@@ -58,19 +58,23 @@ const deleteFacultyFromDB = async (id: string) => {
     session.startTransaction();
 
     // Corrected: Use findOneAndUpdate instead of findByIdAndUpdate
-    const deletefaculty = await FacultyShceemaModel.findOneAndUpdate(
-      { id }, 
+    const deletefaculty = await FacultyShceemaModel.findByIdAndUpdate(
+       id , 
       { isDeleted: true }, 
       { new: true, session }
     );
-
+    if (!deletefaculty) {
+      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to delete faculty');
+    }
+    // get user _id from deletedFaculty
+    const userId = deletefaculty.user;
     if (!deletefaculty) {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to delete faculty');
     }
 
     // Corrected: Use findOneAndUpdate for User as well
-    const deletedUser = await User.findOneAndUpdate(
-      { id }, 
+    const deletedUser = await User.findByIdAndUpdate(
+      userId , 
       { isDeleted: true }, 
       { new: true, session }
     );

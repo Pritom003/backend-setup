@@ -19,21 +19,21 @@ const getAllfaculties :RequestHandler =  CatchAsync(async (req, res  ) => {
 })
 const getSingletfaculty :RequestHandler = CatchAsync( async (req, res  )=> {
 
-    const {facultyId}= req.params;
-    const result = await FacultyServices.getsinglefacultyfromDB(facultyId);
+    const {id}= req.params;
+    const result = await FacultyServices.getsinglefacultyfromDB(id);
  
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Student is retrieved succesfully',
+      message: 'Faculty is retrieved succesfully',
       data: result,
     });
  
 })
 const UpdateFaculty:RequestHandler = CatchAsync(async (req, res) => {
-    const { facultyId } = req.params;
+    const { id } = req.params;
     const {faculty}=req.body
-    const result = await FacultyServices.UpdatedfacultyFromDB(facultyId, faculty);
+    const result = await FacultyServices.UpdatedfacultyFromDB(id, faculty);
   
     sendResponse(res, {
       statusCode: httpStatus.OK,
@@ -44,8 +44,8 @@ const UpdateFaculty:RequestHandler = CatchAsync(async (req, res) => {
   });
   
   const deletefaculty:RequestHandler = CatchAsync(async (req, res) => {
-    const { facultyId } = req.params;
-    const result = await FacultyServices.deleteFacultyFromDB(facultyId);
+    const { id } = req.params;
+    const result = await FacultyServices.deleteFacultyFromDB(id);
   
     sendResponse(res, {
       statusCode: httpStatus.OK,

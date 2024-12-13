@@ -9,10 +9,12 @@ import { TStudent } from '../students/student.interface';
 import studentModel from '../students/student.model';
 import { TUser } from './User.interface';
 import { User } from './user.models';
-import { genarateStudentId, generateFacultyID } from './user.utils';
+import { genarateStudentId, generateAdminID, generateFacultyID } from './user.utils';
 import AppError from '../Errors/AppErrors';
 import { TFaculty } from '../Faculty/Faculty.interface';
 import FacultyShceemaModel from '../Faculty/Faculty.models';
+import { TAdmin } from '../Admin/Admin .interface';
+import AdminShceemaModel from '../Admin/Admin.models';
 // import { genarateStudentId } from "./user.utils";
 
 const createStudentoDB = async (password: string, payload: TStudent) => {
@@ -113,8 +115,48 @@ const createFacultyoDB = async (password: string, payload: TFaculty) => {
   }
 };
 
+const createAdminoDB = async (password: string, payload: TAdmin) => {
+  const userData: Partial<TUser> = {};
+  userData.password = password || (config.default_pass as string);
+  userData.role = 'Admin';
 
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+    userData.id = await generateAdminID();
+    console.log("Generated Admin ID:", userData.id);
+
+    const newUser = await User.create([userData], { session });
+    console.log("Created User: ", newUser);
+
+    if (!newUser.length) {
+      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create User')
+    }
+
+    payload.id = newUser[0].id;
+    payload.user = newUser[0]._id;
+
+    const newAdmin = await AdminShceemaModel.create([payload], { session });
+    console.log("Created Admin: ", newAdmin);
+
+    if (!newAdmin.length) {
+      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create Admin');
+    }
+
+    await session.commitTransaction();
+    await session.endSession();
+    return newAdmin;
+  } catch (err: any) {
+    await session.abortTransaction();
+    await session.endSession();
+
+    console.error("Error in createAdminoDB:", err);
+    throw new AppError(500, `Error creating Admin : ${err.message}`);
+  }
+};
 export const UserService = {
   createStudentoDB,
   createFacultyoDB,
+  createAdminoDB
 };
