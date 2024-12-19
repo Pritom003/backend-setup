@@ -10,4 +10,8 @@ export default {
   DB_URL: process.env.DB_URL as string,
   default_pass:process.env.Default_pass,
   bycrypt_pass:process.env. MY_PlaintextPassword,
+  JWT_SECRET: process.env.JWT_ACCESS_SECRET as string,
+  JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET as string,
+  JWT_REFRESH_IN:process.env.JWT_REFRESH_IN as string,
+  JWT_ACCESS_IN:process.env.JWT_ACCESS_IN as string,
 };

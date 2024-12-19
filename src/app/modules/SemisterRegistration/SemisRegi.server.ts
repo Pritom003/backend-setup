@@ -138,13 +138,7 @@ const updateSemesterRegistrationIntoDB = async (
 };
 
 const deleteSemesterRegistrationFromDB = async (id: string) => {
-  /** 
-  * Step1: Delete associated offered courses.
-  * Step2: Delete semester registraton when the status is 
-  'UPCOMING'.
-  **/
 
-  // checking if the semester registration is exist
   const isSemesterRegistrationExists = await SemesterRegiModel.findById(id);
 
   if (!isSemesterRegistrationExists) {

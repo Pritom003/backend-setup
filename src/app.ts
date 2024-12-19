@@ -6,11 +6,13 @@ import globalErrorHandler from './app/modules/Middlewares/globalErrorhandler';
 
 import NotFound from './app/modules/Middlewares/NotFound';
 import router from './app/routes';
+import cookieParser  from 'cookie-parser';
 const app: Application = express();
 
 // Middleware to parse JSON and handle CORS
 app.use(express.json());
 app.use(cors());
+app.use(cookieParser())
 // app Routes
 app.use('/api/v1', router);
 
